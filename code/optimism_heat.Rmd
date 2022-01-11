@@ -1,0 +1,65 @@
+---
+title: "optimism_heat"
+author: "Austin Kennedy"
+date: "1/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r set up python}
+library(reticulate)
+use_python("C:\\Users\\Austin\\anaconda3", required = TRUE)
+```
+
+```{python test}
+import pickle
+import pandas as pd
+import numpy as np
+with open('../input/volumes_optimism.p', 'rb') as fp:
+    volumes_optimism = pickle.load(fp)
+```
+
+```{python}
+v1800 = pd.DataFrame()
+v1800 = volumes_optimism[1800]
+```
+
+```{r}
+library(ggtern)
+library(ggplot2)
+df <- py$v1800
+ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
+  geom_tri_tern(bins=5,aes(fill=..stat.., value=(df$Percentile)), fun=mean) +
+  stat_tri_tern(bins=5,fun=mean, geom= 'point',
+                aes(size=..count..),
+                color="white",centroid=TRUE) +
+  labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile") +
+  #scale_fill_gradient(low="blue", high="red", na.value="white") +
+  scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white")+
+  limit_tern(labels = c(0.2,0.4,0.6,0.8,1))+
+  theme_dark()
+# 
+# ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
+#   geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile), fun=mean) +
+#   stat_tri_tern(bins=5,fun=count, geom= 'point',size=2,
+#                 color="white",centroid=TRUE) +
+#   labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile") + 
+#   theme()
+
+#ggsave("../output/1800.pdf")
+```
+
+
+```{r Other ternary example}
+ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
+  geom_tri_tern(bins=5,fun=mean,aes(fill=..stat.., value=df$Percentile)) +
+  stat_tri_tern(bins = 5, geom="point", aes(size=..count..), color="white", centroids = TRUE) +
+  scale_colour_grey()
+```
+
+
+
+
