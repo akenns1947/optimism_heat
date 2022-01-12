@@ -31,16 +31,31 @@ v1800 = volumes_optimism[1800]
 library(ggtern)
 library(ggplot2)
 df <- py$v1800
+label = seq(0,1,by=.2)
 ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
-  geom_tri_tern(bins=5,aes(fill=..stat.., value=(df$Percentile)), fun=mean) +
+  geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile),fun=mean) +
   stat_tri_tern(bins=5,fun=mean, geom= 'point',
-                aes(size=..count..),
+                aes(size=..count..,value=df$Percentile),
                 color="white",centroid=TRUE) +
-  labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile") +
-  #scale_fill_gradient(low="blue", high="red", na.value="white") +
-  scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white")+
-  limit_tern(labels = c(0.2,0.4,0.6,0.8,1))+
-  theme_dark()
+  labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile", size="Volumes") +
+  
+#  scale_fill_gradient(low="blue", high="red", na.value="white") +    #Uncomment for red/blue theme
+  # scale_fill_gradient(low="blue", high="red", na.value="white", limits = c(0,1)) + #Uncomment for red/blue theme with full gradient scale
+  # scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white",limits=c(0,1))+ #Uncomment for blue theme with full percentile gradient scale
+  scale_fill_gradient(low = "#56B1F7",high="#132B43", na.value="white")+#Uncomment for blue theme
+  scale_T_continuous(limits=c(0,1.0),
+                     breaks=seq(0,1,by=0.2),
+                     labels=label) +
+  scale_L_continuous(limits=c(0.0,1),
+                     breaks=seq(0,1,by=0.2),
+                     labels=label) +
+  scale_R_continuous(limits=c(0.0,1),
+                     breaks=seq(0,1,by=0.2),
+                     labels=label)+
+  theme_dark()+
+  guides(size= guide_legend(reverse=TRUE))+
+  theme(tern.axis.title.R = element_text(hjust=0.6))
+#  theme_legend_position(x="topright")
 # 
 # ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
 #   geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile), fun=mean) +
@@ -49,14 +64,14 @@ ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
 #   labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile") + 
 #   theme()
 
-#ggsave("../output/1800.pdf")
+ggsave("../output/1800.pdf")
 ```
 
 
 ```{r Other ternary example}
 ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
   geom_tri_tern(bins=5,fun=mean,aes(fill=..stat.., value=df$Percentile)) +
-  stat_tri_tern(bins = 5, geom="point", aes(size=..count..), color="white", centroids = TRUE) +
+  stat_tri_tern(bins = 5, geom="point", aes(size=..count..), color="white", centroid = TRUE) +
   scale_colour_grey()
 ```
 
