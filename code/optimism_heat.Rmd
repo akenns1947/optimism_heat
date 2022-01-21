@@ -27,13 +27,8 @@ import numpy as np
 with open('../input/volumes_optimism.p', 'rb') as fp:
     volumes_optimism = pickle.load(fp)
 ```
-
-```{python}
-v1800 = pd.DataFrame()
-v1800 = volumes_optimism[1800]
-```
-
-```{python define function}
+   
+```{python define dataframe function}
 #This function essentially allows for directly calling the relevant dataframe from r
 def dfyears(year):
   df = volumes_optimism[year]
@@ -41,83 +36,13 @@ def dfyears(year):
 
 ```
 
-```{r}
-df <- py$dfyears(1800)
-
-label = seq(0,1,by=.2)
-ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
-  geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile),fun=mean) +
-  stat_tri_tern(bins=5,fun=mean, geom= 'point',
-                aes(size=..count..,value=df$Percentile),
-                color="white",centroid=TRUE) +
-  labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile", size="Volumes") +
-  
-#  scale_fill_gradient(low="blue", high="red", na.value="white") +    #Uncomment for red/blue theme
-  # scale_fill_gradient(low="blue", high="red", na.value="white", limits = c(0,1)) + #Uncomment for red/blue theme with full gradient scale
-  # scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white",limits=c(0,1))+ #Uncomment for blue theme with full percentile gradient scale
-  # scale_fill_gradient(low = "#56B1F7",high="#132B43", na.value="white")+#Uncomment for blue theme
-  scale_fill_gradient(low = "#56c7f7",high="#132B43", na.value="white")+ #Lighter blue
-  scale_T_continuous(limits=c(0,1.0),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label) +
-  scale_L_continuous(limits=c(0.0,1),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label) +
-  scale_R_continuous(limits=c(0.0,1),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label)+
-  # scale_size(range = c(num_min, num_max))
-  scale_size_continuous(range = c(0,10)) +
-  theme_dark()+
-  guides(size= guide_legend(reverse=TRUE))+
-  theme(tern.axis.title.R = element_text(hjust=0.6))
-#  theme_legend_position(x="topright")
-# 
-# ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
-#   geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile), fun=mean) +
-#   stat_tri_tern(bins=5,fun=count, geom= 'point',size=2,
-#                 color="white",centroid=TRUE) +
-#   labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile") + 
-#   theme()
-
-#ggsave("../output/1800.pdf")
-```
-
-
-```{r Other ternary example}
+```{r set year range}
 years <- seq(1510,1890, by=1)
-label = seq(0,1,by=.2)
-p <- ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
-  geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile),fun=mean) +
-  stat_tri_tern(bins=5,fun=mean, geom= 'point',
-                aes(size=..count..,value=df$Percentile),
-                color="white",centroid=TRUE) +
-  labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile", size="Volumes") +
-  
-#  scale_fill_gradient(low="blue", high="red", na.value="white") +    #Uncomment for red/blue theme
-  # scale_fill_gradient(low="blue", high="red", na.value="white", limits = c(0,1)) + #Uncomment for red/blue theme with full gradient scale
-  # scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white",limits=c(0,1))+ #Uncomment for blue theme with full percentile gradient scale
-  scale_fill_gradient(low = "#56B1F7",high="#132B43", na.value="white")+#Uncomment for blue theme
-  scale_T_continuous(limits=c(0,1.0),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label) +
-  scale_L_continuous(limits=c(0.0,1),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label) +
-  scale_R_continuous(limits=c(0.0,1),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label)+
-  theme_dark()+
-  guides(size= guide_legend(reverse=TRUE))+
-  theme(tern.axis.title.R = element_text(hjust=0.6))
-
-g <- layer_data(p, 1)
-a <- g$stat
-a <- a[!is.na(a)]
 ```
+
 
 ```{r Find max or min optimism and volume count}
-years <- seq(1510, 1890, by = 1) #generate years to iterate over
+# years <- seq(1510, 1890, by = 1) #generate years to iterate over
 opt_max <- 0
 num_max <- 0
 opt_min <- Inf
@@ -133,7 +58,7 @@ for (i in years) {
   dat <- layer_data(p ,1)
   opt <- dat$stat #grab vector of stats corresponding to triangle colors
   num <- dat$count #grab vector of volume counts
-  opt <- opt[!is.na(opt)]
+  opt <- opt[!is.na(opt)] #Take out NAs
   num <- num[!is.na(num)]
   if (max(opt) > opt_max) {
     opt_max <- max(opt)
@@ -150,45 +75,16 @@ for (i in years) {
   if (min(num) < num_min) {
     num_min <- min(num)
   }
-  
-  # ggsave(path)
+
 }
 ```
 
 
-```{r Generate and save plots}
-years <- seq(1510,1890, by=1)
+
+
+```{r generate and save plots}
+# years <- seq(1800,1815, by = 1)
 label = seq(0,1,by=.2)
-p <- ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
-  geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile),fun=mean) +
-  stat_tri_tern(bins=5,fun=mean, geom= 'point',
-                aes(size=..count..,value=df$Percentile),
-                color="white",centroid=TRUE) +
-  labs(x = "Politics", y = "Religion", z = "Science", title="1800", fill="Percentile", size="Volumes") +
-  
-#  scale_fill_gradient(low="blue", high="red", na.value="white") +    #Uncomment for red/blue theme
-  # scale_fill_gradient(low="blue", high="red", na.value="white", limits = c(0,1)) + #Uncomment for red/blue theme with full gradient scale
-  # scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white",limits=c(0,1))+ #Uncomment for blue theme with full percentile gradient scale
-  scale_fill_gradient(low = "#56B1F7",high="#132B43", na.value="white", limits = c(opt_min, opt_max))+#Uncomment for blue theme with limits determined by limits of full set of triangles
-  scale_T_continuous(limits=c(0,1.0),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label) +
-  scale_L_continuous(limits=c(0.0,1),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label) +
-  scale_R_continuous(limits=c(0.0,1),
-                     breaks=seq(0,1,by=0.2),
-                     labels=label)+
-  theme_dark()+
-  guides(size= guide_legend(reverse=TRUE))+
-  theme(tern.axis.title.R = element_text(hjust=0.6))
-
-g <- layer_data(p, 1)
-a <- g$stat
-a <- a[!is.na(a)]
-```
-
-```{r test code}
 for (i in years) {
   df <- py$dfyears(i)
   ggtern(df, aes(x = df$Politics, y = df$Religion, z = df$Science)) +
@@ -203,7 +99,10 @@ for (i in years) {
   # scale_fill_gradient(low="#56B1F7",high="#132B43", na.value="white",limits=c(0,1))+ #Uncomment for blue theme with full percentile gradient scale
   # scale_fill_gradient(low = "#56B1F7",high="#132B43", na.value="white")+#Uncomment for blue theme
     
-  scale_fill_gradient(low = "#56c7f7",high="#132B43", na.value="white")+ #Lighter blue
+  scale_fill_gradient(low = "#56c7f7",high="#132B43", na.value="white", limits = c(opt_min, opt_max))+#Lighter blue
+  scale_size_continuous(range = c(0,10),
+                        limits = c(num_min, num_max),
+                        breaks = c(10, 100, 1000, 2500, 5000, 8000, 12500)) + #Set limits and breaks of volume dots
   scale_T_continuous(limits=c(0,1.0),
                      breaks=seq(0,1,by=0.2),
                      labels=label) +
@@ -214,14 +113,11 @@ for (i in years) {
                      breaks=seq(0,1,by=0.2),
                      labels=label)+
   theme_dark()+
-  guides(size= guide_legend(reverse=TRUE))+
+  guides(size= guide_legend(reverse=TRUE, order = 0))+
   theme(tern.axis.title.R = element_text(hjust=0.6))
-  path <- sprintf("../output/triangles/%s.pdf", i)
+  path <- sprintf("../output/triangles/%s.png", i)
   
-  # ggsave(path)
+  ggsave(path)
 }
 ```
-
-
-
 
