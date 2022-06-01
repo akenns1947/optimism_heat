@@ -16,8 +16,12 @@ library(tidyverse)
 ```
 
 ```{r set up python}
+
 library(reticulate)
-use_python("C:\\Users\\Austin\\anaconda3", required = TRUE)
+
+#SOMETIMES FUNKY STUFF WITH USING PYTHON, COMMANDS BELOW CAN BE USED TO SET WHERE R LOOKS FOR PYTHON, BUT CURRENTLY NOT WORKING FOR SOME REASON.
+# use_python("C:\\Users\\Austin\\anaconda3", required = TRUE)
+# reticulate::use_python(Sys.which('python3'), required = TRUE)
 ```
 
 ```{python libraries and import data}
@@ -53,7 +57,8 @@ for (i in years) {
   geom_tri_tern(bins=5,aes(fill=..stat.., value=df$Percentile),fun=mean) +
   stat_tri_tern(bins=5,fun=mean, geom= 'point',
                 aes(size=..count..,value=df$Percentile),
-                color="white",centroid=TRUE) +
+                color="white",
+                centroid=TRUE) +
   labs(x = "Politics", y = "Religion", z = "Science", title=i, fill="Percentile", size="Volumes")
   dat <- layer_data(p ,1)
   opt <- dat$stat #grab vector of stats corresponding to triangle colors
