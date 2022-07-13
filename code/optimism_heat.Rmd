@@ -124,11 +124,13 @@ for (x in group) {
   theme(tern.axis.title.R = element_text(hjust=0.6))
 
   name <- paste("p",x, sep = "_")
-  tmp <- list(p)
-  l[[name]] <- tmp
+  # tmp <- list(p)
+  l[[name]] <- p
 }
 
-fig <- ggarrange(l$p_1550, l$p_1600, l$p_1650, l$p_1700, l$p_1750, l$p_1800, l$p_1850, ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")
+# fig <- ggarrange(l$p_1550, l$p_1600, l$p_1650, l$p_1700, l$p_1750, l$p_1800, l$p_1850, ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")
+
+fig <- arrangeGrob(grobs = l, ncols = 2)
 
 ggsave("../output/heat_fig.png", fig)
 ```
@@ -175,5 +177,7 @@ for (i in years) {
 ```
 
 
-
+```{r Sandbox}
+p
+```
 
