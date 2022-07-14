@@ -89,7 +89,7 @@ for (i in years) {
 
 #Doesn't work yet
 
-group <- seq(1550,1850, by=50)
+group <- seq(1550,1850,by=50) #Select years for figure
 l <- list()
 label = seq(0,1,by=.2)
 for (x in group) {
@@ -124,8 +124,9 @@ for (x in group) {
   theme(tern.axis.title.R = element_text(hjust=0.6))
 
   name <- paste("p",x, sep = "_")
-  # tmp <- list(p)
-  l[[name]] <- p
+  tmp <- list(p)
+  l[[name]] <- tmp
+  
 }
 
 # fig <- ggarrange(l$p_1550, l$p_1600, l$p_1650, l$p_1700, l$p_1750, l$p_1800, l$p_1850, ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")
