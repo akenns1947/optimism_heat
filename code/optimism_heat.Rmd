@@ -14,6 +14,7 @@ library(ggtern)
 library(ggplot2)
 library(tidyverse)
 library(ggpubr)
+library(patchwork)
 ```
 
 ```{r set up python}
@@ -124,16 +125,22 @@ for (x in group) {
   theme(tern.axis.title.R = element_text(hjust=0.6))
 
   name <- paste("p",x, sep = "_")
-  tmp <- list(p)
+  tmp <- ggplotGrob(p)
   l[[name]] <- tmp
   
 }
 
-# fig <- ggarrange(l$p_1550, l$p_1600, l$p_1650, l$p_1700, l$p_1750, l$p_1800, l$p_1850, ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")
 
-fig <- arrangeGrob(grobs = l, ncols = 2)
+# fig <- ggarrange(plots = l, ncol = 2)
 
-ggsave("../output/heat_fig.png", fig)
+# fig <- do.call(ggarrange, c(l, list(ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")))
+
+fig <- wrap_plots(l, ncol = 2, nrow = 4)
+
+# ggsave("../output/heat_fig.png", fig)
+
+print(fig)
+
 ```
 
 
@@ -179,6 +186,6 @@ for (i in years) {
 
 
 ```{r Sandbox}
-p
+l$p_1750
 ```
 
