@@ -131,13 +131,14 @@ for (x in group) {
 }
 
 
-# fig <- ggarrange(plots = l, ncol = 2)
+# fig <- ggarrange(plots = l, ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")
 
 # fig <- do.call(ggarrange, c(l, list(ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")))
 
-fig <- wrap_plots(l, ncol = 2, nrow = 4)
+fig <- wrap_plots(l, ncol = 2, nrow = 4) + plot_layout(guides = "collect") & theme(legend.position = "right")
 
-# ggsave("../output/heat_fig.png", fig)
+
+ggsave("../output/heat_fig.png", fig)
 
 print(fig)
 
