@@ -290,16 +290,21 @@ for (x in group) {
 # fig <- ggarrange(plots = l, ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")
 
 # fig <- do.call(ggarrange, c(l, list(ncol = 2, nrow = 4, common.legend = TRUE, legend = "right")))
-
-fig <- wrap_plots(l, ncol = 2, nrow = 4) + plot_layout(widths = c(1,15,5), guides = "collect") & theme(legend.position = "right")
-
+# 
+ fig <- wrap_plots(l, ncol = 2, nrow = 4) + plot_layout(widths = c(50,50), heights = c(50,50), guides = "collect") & theme(legend.position = "right")
+ 
+print(fig)
 
 ggsave("../output/heat_fig.png", fig)
 
-print(fig)
 
-grid.arrange(l$p_1550, l$p_1600, l$p_1650, l$p_1700, l$p_1750, l$p_1800, l$p_1850,
-             layout_matrix = rbind(c(1,2), c(3,4), c(5,6), c(7,7)))
+
+# cowplot::plot_grid(plotlist=l, nrow = 4)
+
+
+
+# grid.arrange(l$p_1550, l$p_1600, l$p_1650, l$p_1700, l$p_1750, l$p_1800, l$p_1850,
+#              layout_matrix = rbind(c(1,2), c(3,4), c(5,6), c(7,7)), heights = c(1,1,1,1,1,1,1), widths = c(1,1,1,1,1,1,1))
 # do.call("grid.arrange", c(l, ncol = 2))
 ```
 
