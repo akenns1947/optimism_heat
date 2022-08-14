@@ -178,7 +178,7 @@ for (i in years) {
                      labels=label)+
   theme_dark()+
   guides(size= guide_legend(reverse=TRUE, order = 0))+
-  theme(tern.axis.title.R = element_text(hjust=0.6), tern.axis.title.L = element_text(hjust = 0.3, vjust = 0.9))
+  theme(tern.axis.title.R = element_text(hjust=0.6, vjust = 0.9), tern.axis.title.L = element_text(hjust = 0.3, vjust = 0.9))
   path <- sprintf("../output/triangles/%s.png", i)
   
   ggsave(path, width = 6.5, height = 4.5)
